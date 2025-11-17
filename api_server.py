@@ -576,9 +576,7 @@ async def get_environment_config():
     """Get environment configuration"""
     s3_bucket = os.getenv("S3_BUCKET_NAME", "")
     print(f"DEBUG: S3_BUCKET_NAME environment variable = '{s3_bucket}'")
-    return {
-        "s3_bucket_name": s3_bucket
-    }
+    return {"s3_bucket_name": s3_bucket}
 
 
 @app.get("/api/keyframes/available")

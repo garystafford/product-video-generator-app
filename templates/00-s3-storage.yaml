@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'S3 Storage for Product Video Generator - Creates S3 bucket for video storage'
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: product-video-generator
+    Description: Name of the project used for resource naming
+  
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues: [dev, staging, prod]
+    Description: Environment name for resource tagging
+  
+  UniqueId:
+    Type: String
+    Description: Unique identifier for bucket name (timestamp or random string)
+
+Resources:
+  # S3 Bucket for video storage
+  VideoStorageBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${ProjectName}-videos-${Environment}-${AWS::AccountId}-${UniqueId}'
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+            BucketKeyEnabled: true
+      # Versioning disabled for faster deployment and simpler management
+      VersioningConfiguration:
+        Status: Suspended
+      # CRITICAL: Block ALL public access - bucket must remain private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      # Notifications can be added later if needed via Lambda or SNS
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ManagedBy
+          Value: CloudFormation
+
+
+
+Outputs:
+  VideoStorageBucketName:
+    Description: Name of the S3 bucket for video storage
+    Value: !Ref VideoStorageBucket
+    Export:
+      Name: !Sub '${ProjectName}-${Environment}-S3-VideoStorageBucketName'
+  
+  VideoStorageBucketArn:
+    Description: ARN of the S3 bucket for video storage
+    Value: !GetAtt VideoStorageBucket.Arn
+    Export:
+      Name: !Sub '${ProjectName}-${Environment}-S3-VideoStorageBucketArn'
+  
+  VideoStorageBucketDomainName:
+    Description: Domain name of the S3 bucket
+    Value: !GetAtt VideoStorageBucket.DomainName
+    Export:
+      Name: !Sub '${ProjectName}-${Environment}-S3-VideoStorageBucketDomainName'
