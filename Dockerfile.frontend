@@ -1,0 +1,37 @@
+# Frontend Dockerfile for Product Video Generator UI
+# Multi-stage build: Build React app, then serve with nginx
+
+# Stage 1: Build
+FROM node:22-alpine AS build
+
+WORKDIR /app
+
+# Copy package files
+COPY frontend/package.json frontend/package-lock.json* ./
+
+# Install dependencies
+RUN npm install
+
+# Copy source code
+COPY frontend/ .
+
+# Build the app
+RUN npm run build
+
+# Stage 2: Serve with nginx
+FROM nginx:1.27-alpine
+
+# Copy built files from build stage
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Copy nginx configuration template
+COPY nginx.conf /etc/nginx/templates/default.conf.template
+
+# Set default backend host (can be overridden)
+ENV BACKEND_HOST=127.0.0.1
+
+# Expose port
+EXPOSE 80
+
+# Start nginx (envsubst happens automatically with templates directory)
+CMD ["nginx", "-g", "daemon off;"]

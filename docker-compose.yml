@@ -1,0 +1,85 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: product-video-generator-backend:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persistent storage for generated content
+      - keyframes:/app/keyframes
+      - videos:/app/videos
+      - data:/app/data
+    environment:
+      # AWS credentials (override on commandline, .env file, or Docker secrets)
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-west-2}
+      - AWS_REGION=${AWS_REGION:-us-west-2}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+    networks:
+      - video-gen-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4G
+        reservations:
+          cpus: "1.0"
+          memory: 2G
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    image: product-video-generator-frontend:latest
+    ports:
+      - "80:80"
+    environment:
+      - BACKEND_HOST=backend
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+    depends_on:
+      - backend
+    networks:
+      - video-gen-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+
+networks:
+  video-gen-network:
+    driver: overlay
+    attachable: true
+
+volumes:
+  keyframes:
+    driver: local
+  videos:
+    driver: local
+  data:
+    driver: local

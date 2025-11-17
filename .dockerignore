@@ -1,0 +1,98 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.venv/
+venv/
+ENV/
+env/
+
+# Node
+frontend/node_modules/
+frontend/build/
+frontend/.pnp
+frontend/.pnp.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+backend.log
+frontend.log
+
+# Videos and media (don't include in image)
+videos/*.mp4
+uploads/*
+good_videos/
+keyframes/*.jpg
+keyframes/*.png
+keyframes/*.webp
+
+# Keep directory structure
+!videos/.gitkeep
+!uploads/.gitkeep
+!keyframes/.gitkeep
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.ruff_cache/
+
+# Preliminary files
+_prelims/
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Environment files
+.env
+.env.*
+
+# AWS
+.aws/
+*.pem
+
+# Temporary files
+*.tmp
+*.temp
+list.txt
+*_reversed.mp4
+*_combined.mp4
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+Jenkinsfile
+
+# Configuration that shouldn't be in image
+video_configs.json
