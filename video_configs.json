@@ -1,8 +1,8 @@
 {
   "keyframe_based": [
     {
-      "product_name": "watch",
-      "prompt": "A luxury wristwatch on a clean white surface rotates clockwise around its vertical axis, starting at a 30-degree angle and smoothly transitioning to a perfect side profile. The motion is fluid and realistic, mimicking a showroom product spin, with soft reflections and clear detail on the watch face and casing throughout.",
+      "product_name": "boot",
+      "prompt": "The light brown leather work boot rotates counterclockwise 30 degrees until it is sideways.",
       "aspect_ratio": "1:1",
       "duration": "5s",
       "resolution": "720p",
@@ -12,38 +12,6 @@
       "product_name": "sneaker",
       "prompt": "A running sneaker on a neutral white sweep gently rotates counterclockwise around its vertical axis, starting from a right-facing side view and smoothly transitioning just enough into a slightly front-rotated, slightly elevated angle without spinning past this view. The movement is subtle, focused, and realistic, with studio lighting accentuating the sneaker’s details and texture throughout.",
       "aspect_ratio": "4:3",
-      "duration": "5s",
-      "resolution": "720p",
-      "loop": false
-    },
-    {
-      "product_name": "sunglasses",
-      "prompt": "Designer sunglasses on a reflective surface gently rotate clockwise around their vertical axis, starting from a profile side view focused on the gold detail, and smoothly transitioning to a slightly front-facing, angled view revealing the lens and frame. The motion is subtle and realistic, with soft studio lighting highlighting the sunglasses’ glossy finish and gold accents, never spinning past the end view.",
-      "aspect_ratio": "16:9",
-      "duration": "5s",
-      "resolution": "720p",
-      "loop": false
-    },
-    {
-      "product_name": "coat",
-      "prompt": "A woman models a checked belted coat on a plain background. She gracefully unfastens the belt, then the coat gently shifts from a closed, belted style to an open silhouette, seamlessly transitioning her pose and opening the coat slightly. The motion is natural, fluid, and realistic, maintaining focus on the coat’s texture, structure, and design throughout, with soft, even studio lighting. The transitions between the two keyframes is without excessive movement or spinning.",
-      "aspect_ratio": "3:4",
-      "duration": "5s",
-      "resolution": "720p",
-      "loop": false
-    },
-    {
-      "product_name": "boot",
-      "prompt": "The light brown leather work boot rotates counterclockwise 30 degrees until it is sideways.",
-      "aspect_ratio": "1:1",
-      "duration": "5s",
-      "resolution": "720p",
-      "loop": false
-    },
-    {
-      "product_name": "hiking",
-      "prompt": "The brown leather hiking boots sit on a white background with a drop shadow. The boot rotates clockwise slowly to a side profile view.",
-      "aspect_ratio": "1:1",
       "duration": "5s",
       "resolution": "720p",
       "loop": false

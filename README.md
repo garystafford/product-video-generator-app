@@ -6,6 +6,7 @@ A professional web application for generating product videos using AWS Bedrock a
 
 - **Keyframe Upload**: Upload and preview start and end keyframes for your product videos
 - **Video Generation**: Generate videos with customizable settings (aspect ratio, duration, resolution)
+- **Batch Automation**: Automated batch processing with pre-built product templates
 - **Real-time Monitoring**: Track video generation progress with live updates
 - **Video Gallery**: Browse, preview, and download all generated videos
 - **Responsive Design**: Professional AWS CloudScape UI that works on all devices
@@ -210,6 +211,152 @@ The deployment uses modular CloudFormation templates for better organization:
    - Speed is increased by 1.33x
    - Audio is removed
 5. **Complete**: Final video is ready for viewing and download
+
+## Batch Automation with video_configs.json
+
+The Product Video Generator includes powerful **batch automation capabilities** through the `video_configs.json` configuration file and `batch_generate_product_videos.py` script, enabling enterprise-scale video production.
+
+### Configuration-Driven Batch Processing
+
+The `video_configs.json` file serves as a **centralized configuration hub** for defining multiple product video generation jobs:
+
+```json
+{
+  "keyframe_based": [
+    {
+      "product_name": "watch",
+      "prompt": "A luxury wristwatch rotates clockwise around its vertical axis...",
+      "aspect_ratio": "1:1",
+      "duration": "5s",
+      "resolution": "720p",
+      "loop": false
+    },
+    {
+      "product_name": "sneaker",
+      "prompt": "A running sneaker gently rotates counterclockwise...",
+      "aspect_ratio": "4:3",
+      "duration": "5s",
+      "resolution": "720p",
+      "loop": false
+    }
+  ]
+}
+```
+
+### Pre-Built Product Templates
+
+The application includes **6 professionally crafted templates**:
+
+- **Watch** - Luxury rotation with studio lighting and reflections
+- **Sneaker** - Athletic shoe showcase with texture focus and elevation
+- **Sunglasses** - Designer eyewear with reflective surfaces and gold accents
+- **Coat** - Fashion modeling with dynamic pose changes and belt interaction
+- **Boot** - Work boot rotation emphasizing leather texture
+- **Hiking Boots** - Outdoor footwear side profile with drop shadows
+
+Each template includes **optimized prompts** engineered for consistent, professional results.
+
+### Automated Batch Generation Workflow
+
+The `batch_generate_product_videos.py` script automates the entire pipeline:
+
+**Preparation Phase:**
+
+- Validates all keyframe images exist (`{product_name}_start_frame.jpg`, `{product_name}_end_frame.jpg`)
+- Checks configuration completeness and reports missing files
+- Provides detailed pre-flight validation
+
+**Processing Phase:**
+
+- Processes each product configuration sequentially
+- Configurable delays between jobs (default: 30 seconds) for API rate limiting
+- Intelligent error handling continues processing if individual videos fail
+
+**Post-Processing Phase:**
+
+- Downloads generated videos from S3 automatically
+- Applies boomerang effect processing
+- Creates final processed videos ready for distribution
+
+### Usage Examples
+
+**Basic Batch Generation:**
+
+```bash
+# Generate all configured products
+python batch_generate_product_videos.py my-product-videos-bucket
+```
+
+**Custom Configuration:**
+
+```bash
+# Use custom config file
+python batch_generate_product_videos.py my-bucket --config seasonal_products.json
+```
+
+**Production Environment:**
+
+```bash
+# Set environment variables for production
+export AWS_REGION=us-east-1
+export DELAY_BETWEEN_JOBS=60
+python batch_generate_product_videos.py production-video-bucket
+```
+
+### Enterprise Features
+
+**Intelligent Error Handling:**
+
+- Continues processing if individual videos fail
+- Provides detailed success/failure reporting
+- Exits with proper error codes for CI/CD integration
+
+**Customizable Processing:**
+
+- Environment variable configuration (`AWS_REGION`, `DELAY_BETWEEN_JOBS`)
+- Custom config file support (`--config custom_configs.json`)
+- Flexible S3 bucket targeting
+
+**Production-Ready Logging:**
+
+```bash
+=== BATCH GENERATION SUMMARY ===
+Total: 6 videos
+Successful: 5
+Failed: 1
+
+✓ watch → s3://bucket/videos/watch/output.mp4
+✓ sneaker → s3://bucket/videos/sneaker/output.mp4
+✗ coat → Configuration error: Start frame not found
+```
+
+### Key Benefits
+
+**Time Savings:**
+
+- Generate multiple product videos in a single command
+- No manual intervention required after initial setup
+- Automated post-processing pipeline
+
+**Consistency:**
+
+- Standardized prompt engineering across products
+- Consistent video settings and quality
+- Professional-grade outputs
+
+**Scalability:**
+
+- Easy addition of new product configurations
+- CI/CD pipeline integration ready
+- Cloud-native AWS architecture for enterprise scale
+
+**Cost Efficiency:**
+
+- Batch processing reduces management overhead
+- Configurable delays prevent API throttling
+- Automated cleanup of intermediate files
+
+This automation capability transforms the application from a single-video tool into a **production-ready video generation platform** capable of processing entire product catalogs automatically.
 
 ## Directory Structure
 
