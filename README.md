@@ -243,19 +243,6 @@ The `video_configs.json` file serves as a **centralized configuration hub** for 
 }
 ```
 
-### Pre-Built Product Templates
-
-The application includes **6 professionally crafted templates**:
-
-- **Watch** - Luxury rotation with studio lighting and reflections
-- **Sneaker** - Athletic shoe showcase with texture focus and elevation
-- **Sunglasses** - Designer eyewear with reflective surfaces and gold accents
-- **Coat** - Fashion modeling with dynamic pose changes and belt interaction
-- **Boot** - Work boot rotation emphasizing leather texture
-- **Hiking Boots** - Outdoor footwear side profile with drop shadows
-
-Each template includes **optimized prompts** engineered for consistent, professional results.
-
 ### Automated Batch Generation Workflow
 
 The `batch_generate_product_videos.py` script automates the entire pipeline:
