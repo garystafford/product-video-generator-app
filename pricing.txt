@@ -1,0 +1,2 @@
+Bedrock's price seems to be several times higher than the cost of generating a similar video on Luma AI's platform, which offers newer models, higher resolutions, and longer videos. A nearly equivalent video (5s/720p/24fps) generated on Luma AI would cost $0.50–$1.75, depending on your subscription/API usage.
+Research shows that for a typical 6-second, 720p/24fps video (now considered "entry level" quality), you could expect to pay $0.40–$3 elsewhere, with most users paying $1–$2 per video for top models.
