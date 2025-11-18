@@ -95,3 +95,4 @@ keyframes/*.png
 keyframes/*.jpeg
 /app/
 .venv
+update_ecs_task.sh

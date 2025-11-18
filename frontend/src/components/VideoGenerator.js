@@ -55,6 +55,27 @@ function VideoGenerator() {
     }
   };
 
+  const handleDeleteKeyframes = async (productName) => {
+    if (!window.confirm(`Are you sure you want to delete keyframes for "${productName}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      await axios.delete(`/api/keyframes/${productName}`);
+      setAlertMessage({
+        type: 'success',
+        content: `Keyframes for "${productName}" deleted successfully!`
+      });
+      // Refresh the available keyframes list
+      await fetchAvailableKeyframes();
+    } catch (error) {
+      setAlertMessage({
+        type: 'error',
+        content: `Delete failed: ${error.response?.data?.detail || error.message}`
+      });
+    }
+  };
+
   useEffect(() => {
     // Load config options
     axios.get('/api/config/options')
@@ -293,7 +314,16 @@ function VideoGenerator() {
           <Cards
             cardDefinition={{
               header: item => (
-                <Box variant="h3">{item.product_name}</Box>
+                <SpaceBetween direction="horizontal" size="s">
+                  <Box variant="h3">{item.product_name}</Box>
+                  <Button
+                    variant="icon"
+                    iconName="remove"
+                    ariaLabel={`Delete keyframes for ${item.product_name}`}
+                    onClick={() => handleDeleteKeyframes(item.product_name)}
+                    disabled={isGenerating || isUploading}
+                  />
+                </SpaceBetween>
               ),
               sections: [
                 {

@@ -8,8 +8,7 @@ import {
   Header,
   Badge,
   Modal,
-  ColumnLayout,
-  Grid
+  ColumnLayout
 } from '@cloudscape-design/components';
 import axios from 'axios';
 
@@ -18,7 +17,6 @@ function VideoGallery() {
   const [loading, setLoading] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [showVideoModal, setShowVideoModal] = useState(false);
-  const [selectedItems, setSelectedItems] = useState([]);
 
   const fetchVideos = async () => {
     try {
@@ -95,98 +93,118 @@ function VideoGallery() {
             </Box>
           </Box>
         ) : (
-          <Grid gridDefinition={[
-            { colspan: { default: 12, s: 6, m: 4 } },
-            { colspan: { default: 12, s: 6, m: 4 } },
-            { colspan: { default: 12, s: 6, m: 4 } }
-          ]}>
-            {videos.map((video) => (
-              <Container key={video.video_id}>
-                <SpaceBetween size="m">
-                  <Box>
-                    <Box variant="h3">{video.product_name}</Box>
-                    <Badge color="green">{video.status}</Badge>
-                  </Box>
-
-                  {video.start_keyframe && (
-                    <Box textAlign="center">
-                      <img
-                        src={`/api/keyframes/${video.product_name}/start`}
-                        alt="Start frame"
-                        style={{
-                          width: '100%',
-                          maxHeight: '200px',
-                          objectFit: 'contain',
-                          borderRadius: '8px',
-                          cursor: 'pointer'
-                        }}
-                        onClick={() => handleViewVideo(video)}
-                      />
+          <Cards
+            cardDefinition={{
+              header: video => (
+                <SpaceBetween direction="horizontal" size="s">
+                  <Box variant="h3">{video.product_name}</Box>
+                  <Badge color="green">{video.status}</Badge>
+                </SpaceBetween>
+              ),
+              sections: [
+                {
+                  id: 'thumbnail',
+                  content: video => (
+                    video.start_keyframe && (
+                      <Box textAlign="center">
+                        <img
+                          src={`/api/keyframes/${video.product_name}/start`}
+                          alt="Start frame"
+                          style={{
+                            width: '100%',
+                            maxWidth: '200px',
+                            maxHeight: '200px',
+                            objectFit: 'contain',
+                            borderRadius: '8px',
+                            cursor: 'pointer'
+                          }}
+                          onClick={() => handleViewVideo(video)}
+                        />
+                      </Box>
+                    )
+                  )
+                },
+                {
+                  id: 'details',
+                  content: video => (
+                    <Box fontSize="body-s" color="text-body-secondary">
+                      <SpaceBetween size="xs">
+                        <Box>
+                          <strong>Prompt:</strong> {video.prompt?.substring(0, 100)}
+                          {video.prompt?.length > 100 && '...'}
+                        </Box>
+                        <Box>
+                          <strong>Created:</strong> {formatDate(video.created_at)}
+                        </Box>
+                      </SpaceBetween>
                     </Box>
-                  )}
-
-                  <Box fontSize="body-s" color="text-body-secondary">
+                  )
+                },
+                {
+                  id: 'actions',
+                  content: video => (
                     <SpaceBetween size="xs">
-                      <Box>
-                        <strong>Prompt:</strong> {video.prompt?.substring(0, 100)}
-                        {video.prompt?.length > 100 && '...'}
-                      </Box>
-                      <Box>
-                        <strong>Created:</strong> {formatDate(video.created_at)}
-                      </Box>
-                    </SpaceBetween>
-                  </Box>
-
-                  <SpaceBetween size="xs">
-                    <Button
-                      variant="primary"
-                      onClick={() => handleViewVideo(video)}
-                      fullWidth
-                      iconName="video-on"
-                    >
-                      Play Video
-                    </Button>
-
-                    <ColumnLayout columns={2}>
                       <Button
-                        onClick={() => handleDownload(video.video_id)}
+                        variant="primary"
+                        onClick={() => handleViewVideo(video)}
                         fullWidth
-                        iconName="download"
+                        iconName="video-on"
                       >
-                        Download
+                        Play Video
                       </Button>
-                      <Button
-                        onClick={() => handleDelete(video)}
-                        fullWidth
-                        iconName="remove"
-                      >
-                        Delete
-                      </Button>
-                    </ColumnLayout>
 
-                    <Button
-                      onClick={() => handleDownload(video.video_id, true)}
-                      fullWidth
-                      variant="normal"
-                    >
-                      Download Original
-                    </Button>
+                      <ColumnLayout columns={2}>
+                        <Button
+                          onClick={() => handleDownload(video.video_id)}
+                          fullWidth
+                          iconName="download"
+                        >
+                          Download
+                        </Button>
+                        <Button
+                          onClick={() => handleDelete(video)}
+                          fullWidth
+                          iconName="remove"
+                        >
+                          Delete
+                        </Button>
+                      </ColumnLayout>
 
-                    {video.s3_uri && (
                       <Button
-                        onClick={() => window.open(video.s3_uri.replace('s3://', 'https://s3.console.aws.amazon.com/s3/object/'), '_blank')}
+                        onClick={() => handleDownload(video.video_id, true)}
                         fullWidth
                         variant="normal"
-                        iconName="external"
                       >
-                        View in S3
+                        Download Original
                       </Button>
-                    )}
-                  </SpaceBetween>
-                </SpaceBetween>
-              </Container>
-            ))}
-          </Grid>
+
+                      {video.s3_uri && (
+                        <Button
+                          onClick={() => window.open(video.s3_uri.replace('s3://', 'https://s3.console.aws.amazon.com/s3/object/'), '_blank')}
+                          fullWidth
+                          variant="normal"
+                          iconName="external"
+                        >
+                          View in S3
+                        </Button>
+                      )}
+                    </SpaceBetween>
+                  )
+                }
+              ]
+            }}
+            cardsPerRow={[
+              { cards: 1 },
+              { minWidth: 500, cards: 2 },
+              { minWidth: 800, cards: 3 }
+            ]}
+            items={videos}
+            empty={
+              <Box textAlign="center" color="text-body-secondary">
+                No videos available
+              </Box>
+            }
+          />
         )}
       </Container>
 
@@ -289,6 +307,7 @@ function VideoGallery() {
                       alt="Start frame"
                       style={{
                         width: '100%',
+                        maxWidth: '200px',
                         maxHeight: '300px',
                         objectFit: 'contain',
                         borderRadius: '8px'
@@ -307,6 +326,7 @@ function VideoGallery() {
                       alt="End frame"
                       style={{
                         width: '100%',
+                        maxWidth: '200px',
                         maxHeight: '300px',
                         objectFit: 'contain',
                         borderRadius: '8px'

@@ -500,6 +500,46 @@ async def download_final_video(video_id: str, original: bool = False):
     )
 
 
+@app.delete("/api/keyframes/{product_name}")
+async def delete_keyframes(product_name: str):
+    """Delete keyframes for a specific product"""
+    try:
+        if product_name not in keyframes_db:
+            raise HTTPException(404, f"Keyframes for product '{product_name}' not found")
+        
+        # Get keyframe data
+        keyframe_data = keyframes_db[product_name]
+        
+        # Delete files if they exist
+        files_deleted = []
+        if keyframe_data.get("start_frame"):
+            start_path = Path(keyframe_data["start_frame"])
+            if start_path.exists():
+                start_path.unlink()
+                files_deleted.append(str(start_path))
+        
+        if keyframe_data.get("end_frame"):
+            end_path = Path(keyframe_data["end_frame"])
+            if end_path.exists():
+                end_path.unlink()
+                files_deleted.append(str(end_path))
+        
+        # Remove from database
+        del keyframes_db[product_name]
+        save_databases()
+        
+        return {
+            "success": True,
+            "message": f"Keyframes for '{product_name}' deleted successfully",
+            "files_deleted": files_deleted
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(500, f"Failed to delete keyframes: {str(e)}")
+
+
 @app.get("/api/keyframes/{product_name}/{frame_type}")
 async def get_keyframe(product_name: str, frame_type: str):
     """Get keyframe image (start or end)"""
